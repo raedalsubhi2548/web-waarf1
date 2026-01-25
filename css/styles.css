@@ -114,13 +114,11 @@ body.intro-active {
 }
 
 .intro-logo {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 20px 60px var(--shadow-medium);
-    border: 4px solid var(--primary-dark);
-    background: var(--white);
+    width: 160px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 40px var(--shadow-medium));
+    /* NO circle, NO border - matches header logo */
 }
 
 /* ========================================
@@ -1086,7 +1084,68 @@ body.intro-active {
     font-size: 1rem;
     font-weight: 600;
     color: var(--primary-dark);
-    margin: 0;
+    margin: 0 0 20px 0;
+}
+
+/* Contact Buttons for About Demo Section */
+.contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Tajawal', sans-serif;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #09382E;
+}
+
+.contact-btn svg {
+    width: 20px;
+    height: 20px;
+    color: #09382E;
+    flex-shrink: 0;
+}
+
+.contact-btn-store {
+    background: #09382E;
+    color: #fff;
+}
+
+.contact-btn-store svg {
+    color: #fff;
+}
+
+.contact-btn-store:hover {
+    background: #0d4a3d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(9, 56, 46, 0.3);
+}
+
+.contact-btn-whatsapp {
+    background: #fff;
+    color: #09382E;
+}
+
+.contact-btn-whatsapp:hover {
+    background: #09382E;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(9, 56, 46, 0.3);
+}
+
+.contact-btn-whatsapp:hover svg {
+    color: #fff;
 }
 
 /* ========================================
@@ -1254,13 +1313,12 @@ body.intro-active {
 }
 
 .footer-logo {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 100px;
+    height: auto;
+    object-fit: contain;
     margin-bottom: 15px;
-    box-shadow: 0 5px 20px var(--shadow-soft);
-    border: 3px solid var(--primary-dark);
+    filter: drop-shadow(0 5px 15px var(--shadow-soft));
+    /* NO circle, NO border - matches header logo exactly */
 }
 
 .footer-brand-name {
@@ -1329,40 +1387,51 @@ body.intro-active {
 .business-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     background: var(--white);
     border: 1px solid var(--glass-border);
     border-radius: 10px;
-    padding: 10px 16px;
-    color: var(--text-body);
-    font-size: 0.85rem;
+    padding: 8px 12px;
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0 3px 10px var(--shadow-soft);
 }
 
 .business-badge:hover {
-    background: var(--primary-dark);
-    color: var(--white);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-medium);
 }
 
-.business-badge svg {
-    width: 18px;
-    height: 18px;
-    color: var(--gold-accent);
+/* Official Saudi Business Platform Logo */
+.saudi-business-logo {
+    height: 35px;
+    width: auto;
+    object-fit: contain;
 }
 
 .footer-bottom {
     text-align: center;
     padding-top: 30px;
     border-top: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .footer-copyright {
     font-size: 0.85rem;
     color: var(--text-light);
     margin: 0;
+}
+
+/* Version Tag for deployment verification */
+.version-tag {
+    font-size: 0.65rem;
+    color: var(--text-light);
+    opacity: 0.5;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 @media (max-width: 768px) {

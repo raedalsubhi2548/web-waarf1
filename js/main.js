@@ -297,10 +297,16 @@
     // ========================================
     function initTypewriterEffect() {
         const typewriterElement = document.getElementById('typewriterText');
-        if (!typewriterElement) return;
+        if (!typewriterElement) {
+            console.log('Typewriter element not found');
+            return;
+        }
 
         const fullText = typewriterElement.getAttribute('data-text');
-        if (!fullText) return;
+        if (!fullText) {
+            console.log('Typewriter data-text not found');
+            return;
+        }
 
         const cursor = typewriterElement.querySelector('.typewriter-cursor');
         let hasTyped = false;
@@ -309,11 +315,11 @@
 
         function typeCharacter() {
             if (charIndex < fullText.length) {
-                // Add character by character (RTL-safe: just append, CSS handles direction)
+                // Add character by character (RTL-safe: substring preserves Arabic joining)
                 textSpan.textContent = fullText.substring(0, charIndex + 1);
                 charIndex++;
-                // Variable speed for natural feel
-                const speed = 25 + Math.random() * 20;
+                // Variable speed for natural feel (faster for smoother Arabic)
+                const speed = 20 + Math.random() * 15;
                 setTimeout(typeCharacter, speed);
             } else {
                 // Typing complete - hide cursor after short delay
@@ -321,16 +327,13 @@
                     if (cursor) {
                         cursor.classList.add('hidden');
                     }
-                }, 1500);
+                }, 1200);
             }
         }
 
         function startTypewriter() {
             if (hasTyped) return;
             hasTyped = true;
-            
-            // Mark as typed in sessionStorage (only type once per visit)
-            sessionStorage.setItem('waarfeTypewriterDone', 'true');
             
             // Create text span for the typed content
             textSpan = document.createElement('span');
@@ -347,38 +350,25 @@
             typeCharacter();
         }
 
-        // Check if already typed this session
-        if (sessionStorage.getItem('waarfeTypewriterDone')) {
-            // Show full text immediately
-            const textSpanImmediate = document.createElement('span');
-            textSpanImmediate.className = 'typewriter-content';
-            textSpanImmediate.textContent = fullText;
-            if (cursor) {
-                typewriterElement.insertBefore(textSpanImmediate, cursor);
-                cursor.classList.add('hidden');
-            } else {
-                typewriterElement.appendChild(textSpanImmediate);
-            }
-            hasTyped = true;
-            return;
-        }
-
         // Use IntersectionObserver to trigger when section enters viewport
         const descriptionSection = document.getElementById('description');
-        if (!descriptionSection) return;
+        if (!descriptionSection) {
+            console.log('Description section not found');
+            return;
+        }
 
         const typewriterObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !hasTyped) {
                     // Small delay before starting
-                    setTimeout(startTypewriter, 300);
+                    setTimeout(startTypewriter, 200);
                     // Stop observing after triggering
                     typewriterObserver.unobserve(entry.target);
                 }
             });
         }, {
-            threshold: 0.3,
-            rootMargin: '0px 0px -100px 0px'
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
         });
 
         typewriterObserver.observe(descriptionSection);

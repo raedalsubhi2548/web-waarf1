@@ -69,7 +69,7 @@
     }
 
     // ========================================
-    // BOTTLE REVEAL & SCROLL ZOOM
+    // BOTTLE REVEAL - Keep bottle steady (no scroll zoom)
     // ========================================
     function revealBottle() {
         if (elements.bottleImage) {
@@ -78,16 +78,8 @@
     }
 
     function handleScrollZoom() {
-        if (!elements.bottleImage || !elements.hero) return;
-
-        const heroRect = elements.hero.getBoundingClientRect();
-        const scrollProgress = Math.min(1, Math.max(0, -heroRect.top / (heroRect.height * 0.5)));
-        
-        // Zoom effect: scale from 1 to 1.1 as user scrolls
-        const scale = 1 + (scrollProgress * 0.1);
-        const translateY = scrollProgress * -20;
-        
-        elements.bottleImage.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+        // Disabled - bottle stays steady with only gentle idle CSS float
+        // No scroll-based transform changes
     }
 
     // ========================================
@@ -301,6 +293,98 @@
     }
 
     // ========================================
+    // TYPEWRITER EFFECT FOR "عن العطر" SECTION
+    // ========================================
+    function initTypewriterEffect() {
+        const typewriterElement = document.getElementById('typewriterText');
+        if (!typewriterElement) return;
+
+        const fullText = typewriterElement.getAttribute('data-text');
+        if (!fullText) return;
+
+        const cursor = typewriterElement.querySelector('.typewriter-cursor');
+        let hasTyped = false;
+        let charIndex = 0;
+        let textSpan = null;
+
+        function typeCharacter() {
+            if (charIndex < fullText.length) {
+                // Add character by character (RTL-safe: just append, CSS handles direction)
+                textSpan.textContent = fullText.substring(0, charIndex + 1);
+                charIndex++;
+                // Variable speed for natural feel
+                const speed = 25 + Math.random() * 20;
+                setTimeout(typeCharacter, speed);
+            } else {
+                // Typing complete - hide cursor after short delay
+                setTimeout(() => {
+                    if (cursor) {
+                        cursor.classList.add('hidden');
+                    }
+                }, 1500);
+            }
+        }
+
+        function startTypewriter() {
+            if (hasTyped) return;
+            hasTyped = true;
+            
+            // Mark as typed in sessionStorage (only type once per visit)
+            sessionStorage.setItem('waarfeTypewriterDone', 'true');
+            
+            // Create text span for the typed content
+            textSpan = document.createElement('span');
+            textSpan.className = 'typewriter-content';
+            
+            // Insert before cursor
+            if (cursor) {
+                typewriterElement.insertBefore(textSpan, cursor);
+            } else {
+                typewriterElement.appendChild(textSpan);
+            }
+            
+            // Start typing
+            typeCharacter();
+        }
+
+        // Check if already typed this session
+        if (sessionStorage.getItem('waarfeTypewriterDone')) {
+            // Show full text immediately
+            const textSpanImmediate = document.createElement('span');
+            textSpanImmediate.className = 'typewriter-content';
+            textSpanImmediate.textContent = fullText;
+            if (cursor) {
+                typewriterElement.insertBefore(textSpanImmediate, cursor);
+                cursor.classList.add('hidden');
+            } else {
+                typewriterElement.appendChild(textSpanImmediate);
+            }
+            hasTyped = true;
+            return;
+        }
+
+        // Use IntersectionObserver to trigger when section enters viewport
+        const descriptionSection = document.getElementById('description');
+        if (!descriptionSection) return;
+
+        const typewriterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasTyped) {
+                    // Small delay before starting
+                    setTimeout(startTypewriter, 300);
+                    // Stop observing after triggering
+                    typewriterObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        typewriterObserver.observe(descriptionSection);
+    }
+
+    // ========================================
     // PARALLAX EFFECTS
     // ========================================
     function handleParallax() {
@@ -315,22 +399,12 @@
     }
 
     // ========================================
-    // BOTTLE FLOAT ANIMATION
+    // BOTTLE FLOAT ANIMATION - Keep bottle steady/fixed
     // ========================================
     function initBottleFloat() {
-        if (!elements.heroBottle) return;
-        
-        // The bottle now has CSS animation, but we can add subtle mouse parallax
-        document.addEventListener('mousemove', (e) => {
-            if (window.innerWidth < 768) return;
-            
-            const x = (e.clientX / window.innerWidth - 0.5) * 10;
-            const y = (e.clientY / window.innerHeight - 0.5) * 10;
-            
-            if (elements.heroBottle) {
-                elements.heroBottle.style.transform = `translate(${x}px, ${y}px)`;
-            }
-        });
+        // Bottle stays steady with only CSS idle float animation
+        // No mouse parallax or scroll effects that move position
+        // The bottle has a gentle CSS float animation only
     }
 
     // ========================================
@@ -388,7 +462,10 @@
         // Initialize section animations
         initSectionAnimations();
         
-        // Initialize bottle float / parallax
+        // Initialize typewriter effect for "عن العطر" section
+        initTypewriterEffect();
+        
+        // Initialize bottle float / parallax (now minimal - bottle stays steady)
         initBottleFloat();
         
         // Initialize event listeners

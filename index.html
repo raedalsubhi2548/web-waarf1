@@ -8,10 +8,43 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- FAILSAFE: Guarantee intro overlay hides even if main JS fails -->
+    <script>
+        (function() {
+            var hidden = false;
+            function hideIntro() {
+                if (hidden) return;
+                hidden = true;
+                var intro = document.getElementById('cinematicIntro');
+                if (intro) {
+                    intro.style.opacity = '0';
+                    intro.style.pointerEvents = 'none';
+                    intro.style.visibility = 'hidden';
+                    setTimeout(function() {
+                        intro.style.display = 'none';
+                        if (intro.parentNode) intro.parentNode.removeChild(intro);
+                    }, 600);
+                }
+                document.body.style.overflow = '';
+                document.body.classList.remove('intro-active');
+            }
+            // Hard timeout: ALWAYS hide after 1200ms max
+            setTimeout(hideIntro, 1200);
+            // Also on DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', function() { setTimeout(hideIntro, 800); });
+            // Also on window load
+            window.addEventListener('load', function() { setTimeout(hideIntro, 100); });
+            // Catch any global errors
+            window.addEventListener('error', hideIntro);
+            // Expose for skip button
+            window.skipIntro = hideIntro;
+        })();
+    </script>
 </head>
 <body>
     <!-- Cinematic Intro Overlay -->
     <div class="cinematic-intro" id="cinematicIntro">
+        <button class="intro-skip-btn" onclick="window.skipIntro && window.skipIntro()">تخطي</button>
         <div class="intro-mist"></div>
         <div class="intro-content">
             <img src="https://c.top4top.io/p_3676b3ctn1.jpg" alt="Waarfe Logo" class="intro-logo">
@@ -130,19 +163,12 @@
                 <div class="description-card">
                     <div class="description-ornament">✦</div>
                     <h2 class="section-title">عن العطر</h2>
-<<<<<<< HEAD
                     <div class="typewriter-container" id="typewriterContainer">
                         <span class="typewriter-text" id="typewriterText"></span><span class="typewriter-cursor" id="typewriterCursor">|</span>
                     </div>
-=======
-                    <!-- Typewriter effect paragraph -->
-                    <p class="typewriter-text" id="typewriterText" data-text="عطر وارف هو رحلة حسية تأخذك إلى حدائق الشرق الساحرة، حيث يمتزج عبق العود الملكي مع نعومة الورد الدمشقي ودفء المسك الأبيض. صُمم هذا العطر للشخصية الواثقة التي تترك أثرًا لا يُنسى أينما حلّت.">
-                        <span class="typewriter-cursor"></span>
-                    </p>
-                    <p class="description-text">
+                    <p class="description-text" id="typewriterText2" style="display:none">
                         تركيبة فريدة تجمع بين الأصالة العربية والفخامة العصرية، لتمنحك حضورًا مميزًا يدوم طوال اليوم.
                     </p>
->>>>>>> 39e4c227c1c66142132c981d9f5e9d6229de84d6
                     <div class="description-ornament">✦</div>
                 </div>
             </div>
@@ -351,20 +377,15 @@
                                 </svg>
                             </a>
                         </div>
-<<<<<<< HEAD
-                        <a href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/0000097927" target="_blank" rel="noopener" class="business-badge-new">
-                            <img src="https://h.top4top.io/p_3678tpcrm1.png" alt="منصة الأعمال السعودية" class="business-badge-img">
-                            <span class="business-badge-text">موثوق في منصة الأعمال</span>
-=======
-                        <a href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/0000097927" target="_blank" rel="noopener" class="business-badge">
-                            <img src="https://eauthenticate.saudibusiness.gov.sa/assets/images/logo.svg" alt="منصة الأعمال السعودية" class="saudi-business-logo">
->>>>>>> 39e4c227c1c66142132c981d9f5e9d6229de84d6
+                        <a href="https://eauthenticate.saudibusiness.gov.sa/certificate-details/0000097927" target="_blank" rel="noopener" class="business-badge-float">
+                            <img src="https://h.top4top.io/p_3678tpcrm1.png" alt="منصة الأعمال السعودية" class="business-badge-img-float">
+                            <div class="business-badge-text-float">موثوق في منصة الأعمال</div>
                         </a>
                     </div>
                 </div>
                 <div class="footer-bottom">
                     <p class="footer-copyright">© 2026 متجر وارف — جميع الحقوق محفوظة</p>
-                    <span class="version-tag">V-FIX-01</span>
+                    <span class="version-tag">V-LOADER-FIX-02</span>
                 </div>
             </div>
         </footer>

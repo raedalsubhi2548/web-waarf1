@@ -70,17 +70,22 @@ body.intro-active {
     align-items: center;
     justify-content: center;
     opacity: 1;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease;
 }
 
 .cinematic-intro.fade-out {
     opacity: 0;
+    visibility: hidden;
     transform: scale(1.05);
     pointer-events: none;
 }
 
-.cinematic-intro.hidden {
-    display: none;
+.cinematic-intro.hidden,
+.cinematic-intro[style*="display: none"] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 .intro-mist {
@@ -119,6 +124,29 @@ body.intro-active {
     object-fit: contain;
     filter: drop-shadow(0 15px 40px var(--shadow-medium));
     /* NO circle, NO border - matches header logo */
+}
+
+/* Skip Button on Intro Overlay */
+.intro-skip-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(9, 56, 46, 0.15);
+    border: 1px solid var(--primary-dark);
+    color: var(--primary-dark);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    z-index: 10001;
+    transition: all 0.3s ease;
+}
+
+.intro-skip-btn:hover {
+    background: var(--primary-dark);
+    color: var(--white);
 }
 
 /* ========================================

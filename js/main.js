@@ -297,17 +297,15 @@
     }
 
     // ========================================
-<<<<<<< HEAD
     // TYPEWRITER EFFECT - عن العطر Section
     // ========================================
-    const typewriterFullText = 
-        'عطر وارف هو رحلة حسية تأخذك إلى حدائق الشرق الساحرة، حيث يمتزج عبق العود الملكي مع نعومة الورد الدمشقي ودفء المسك الأبيض. صُمم هذا العطر للشخصية الواثقة التي تترك أثرًا لا يُنسى أينما حلّت.\n\nتركيبة فريدة تجمع بين الأصالة العربية والفخامة العصرية، لتمنحك حضورًا مميزًا يدوم طوال اليوم.';
+    const typewriterFullText1 = 'عطر وارف هو رحلة حسية تأخذك إلى حدائق الشرق الساحرة، حيث يمتزج عبق العود الملكي مع نعومة الورد الدمشقي ودفء المسك الأبيض. صُمم هذا العطر للشخصية الواثقة التي تترك أثرًا لا يُنسى أينما حلّت.';
+    const typewriterFullText2 = 'تركيبة فريدة تجمع بين الأصالة العربية والفخامة العصرية، لتمنحك حضورًا مميزًا يدوم طوال اليوم.';
 
     function typeWriter(text, element, cursorElement, speed = 35) {
         return new Promise((resolve) => {
             let index = 0;
             element.textContent = '';
-            
             function type() {
                 if (index < text.length) {
                     const char = text.charAt(index);
@@ -315,29 +313,32 @@
                     index++;
                     setTimeout(type, speed);
                 } else {
-                    // Typing complete - hide cursor after a delay
                     setTimeout(() => {
                         if (cursorElement) {
                             cursorElement.classList.add('hidden');
                         }
                         resolve();
-                    }, 1500);
+                    }, 1200);
                 }
             }
-            
             type();
         });
     }
 
     function initTypewriter() {
         if (!elements.descriptionSection || !elements.typewriterText || !elements.typewriterCursor) return;
-        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !state.typewriterStarted) {
                     state.typewriterStarted = true;
-                    // Start typing with premium smooth speed
-                    typeWriter(typewriterFullText, elements.typewriterText, elements.typewriterCursor, 30);
+                    typeWriter(typewriterFullText1, elements.typewriterText, elements.typewriterCursor, 30).then(() => {
+                        // Show and type second paragraph
+                        const p2 = document.getElementById('typewriterText2');
+                        if (p2) {
+                            p2.style.display = 'block';
+                            typeWriter(typewriterFullText2, p2, null, 30);
+                        }
+                    });
                     observer.unobserve(entry.target);
                 }
             });
@@ -345,89 +346,7 @@
             threshold: 0.3,
             rootMargin: '0px 0px -100px 0px'
         });
-
         observer.observe(elements.descriptionSection);
-=======
-    // TYPEWRITER EFFECT FOR "عن العطر" SECTION
-    // ========================================
-    function initTypewriterEffect() {
-        const typewriterElement = document.getElementById('typewriterText');
-        if (!typewriterElement) {
-            console.log('Typewriter element not found');
-            return;
-        }
-
-        const fullText = typewriterElement.getAttribute('data-text');
-        if (!fullText) {
-            console.log('Typewriter data-text not found');
-            return;
-        }
-
-        const cursor = typewriterElement.querySelector('.typewriter-cursor');
-        let hasTyped = false;
-        let charIndex = 0;
-        let textSpan = null;
-
-        function typeCharacter() {
-            if (charIndex < fullText.length) {
-                // Add character by character (RTL-safe: substring preserves Arabic joining)
-                textSpan.textContent = fullText.substring(0, charIndex + 1);
-                charIndex++;
-                // Variable speed for natural feel (faster for smoother Arabic)
-                const speed = 20 + Math.random() * 15;
-                setTimeout(typeCharacter, speed);
-            } else {
-                // Typing complete - hide cursor after short delay
-                setTimeout(() => {
-                    if (cursor) {
-                        cursor.classList.add('hidden');
-                    }
-                }, 1200);
-            }
-        }
-
-        function startTypewriter() {
-            if (hasTyped) return;
-            hasTyped = true;
-            
-            // Create text span for the typed content
-            textSpan = document.createElement('span');
-            textSpan.className = 'typewriter-content';
-            
-            // Insert before cursor
-            if (cursor) {
-                typewriterElement.insertBefore(textSpan, cursor);
-            } else {
-                typewriterElement.appendChild(textSpan);
-            }
-            
-            // Start typing
-            typeCharacter();
-        }
-
-        // Use IntersectionObserver to trigger when section enters viewport
-        const descriptionSection = document.getElementById('description');
-        if (!descriptionSection) {
-            console.log('Description section not found');
-            return;
-        }
-
-        const typewriterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !hasTyped) {
-                    // Small delay before starting
-                    setTimeout(startTypewriter, 200);
-                    // Stop observing after triggering
-                    typewriterObserver.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.2,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        typewriterObserver.observe(descriptionSection);
->>>>>>> 39e4c227c1c66142132c981d9f5e9d6229de84d6
     }
 
     // ========================================
@@ -508,17 +427,10 @@
         // Initialize section animations
         initSectionAnimations();
         
-<<<<<<< HEAD
         // Initialize typewriter effect for عن العطر section
         initTypewriter();
         
         // Initialize bottle float / parallax
-=======
-        // Initialize typewriter effect for "عن العطر" section
-        initTypewriterEffect();
-        
-        // Initialize bottle float / parallax (now minimal - bottle stays steady)
->>>>>>> 39e4c227c1c66142132c981d9f5e9d6229de84d6
         initBottleFloat();
         
         // Initialize event listeners

@@ -1644,3 +1644,91 @@ a:focus-visible {
     opacity: 1;
     transform: translateY(0);
 }
+/* ========================================
+   TYPEWRITER EFFECT
+   ======================================== */
+.typewriter-container {
+    font-size: 1.2rem;
+    color: var(--text-body);
+    line-height: 2;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    min-height: 150px;
+    direction: rtl;
+}
+
+.typewriter-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.typewriter-cursor {
+    display: inline-block;
+    color: var(--primary-dark);
+    font-weight: 300;
+    animation: cursorBlink 0.7s ease-in-out infinite;
+    margin-right: 2px;
+}
+
+.typewriter-cursor.hidden {
+    opacity: 0;
+    animation: none;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ========================================
+   BUSINESS BADGE - New Image Style
+   ======================================== */
+.business-badge-new {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--white);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 3px 15px var(--shadow-soft);
+}
+
+.business-badge-new:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--shadow-medium);
+}
+
+.business-badge-img {
+    width: auto;
+    height: 60px;
+    max-width: 180px;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+.business-badge-text {
+    font-size: 0.85rem;
+    color: var(--primary-dark);
+    font-weight: 500;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .typewriter-container {
+        font-size: 1.05rem;
+        min-height: 200px;
+    }
+    
+    .business-badge-img {
+        height: 50px;
+    }
+    
+    .business-badge-text {
+        font-size: 0.8rem;
+    }
+}

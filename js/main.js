@@ -24,7 +24,10 @@
         breezeContainer: document.getElementById('breezeContainer'),
         breezeTrails: document.querySelectorAll('.breeze-trail'),
         hero: document.getElementById('hero'),
-        accordionItems: document.querySelectorAll('.accordion-item')
+        accordionItems: document.querySelectorAll('.accordion-item'),
+        descriptionSection: document.getElementById('description'),
+        typewriterText: document.getElementById('typewriterText'),
+        typewriterCursor: document.getElementById('typewriterCursor')
     };
 
     // ========================================
@@ -38,7 +41,8 @@
         mouseX: 0,
         mouseY: 0,
         toastTimeout: null,
-        particles: []
+        particles: [],
+        typewriterStarted: false
     };
 
     // ========================================
@@ -301,6 +305,58 @@
     }
 
     // ========================================
+    // TYPEWRITER EFFECT - عن العطر Section
+    // ========================================
+    const typewriterFullText = 
+        'عطر وارف هو رحلة حسية تأخذك إلى حدائق الشرق الساحرة، حيث يمتزج عبق العود الملكي مع نعومة الورد الدمشقي ودفء المسك الأبيض. صُمم هذا العطر للشخصية الواثقة التي تترك أثرًا لا يُنسى أينما حلّت.\n\nتركيبة فريدة تجمع بين الأصالة العربية والفخامة العصرية، لتمنحك حضورًا مميزًا يدوم طوال اليوم.';
+
+    function typeWriter(text, element, cursorElement, speed = 35) {
+        return new Promise((resolve) => {
+            let index = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (index < text.length) {
+                    const char = text.charAt(index);
+                    element.textContent += char;
+                    index++;
+                    setTimeout(type, speed);
+                } else {
+                    // Typing complete - hide cursor after a delay
+                    setTimeout(() => {
+                        if (cursorElement) {
+                            cursorElement.classList.add('hidden');
+                        }
+                        resolve();
+                    }, 1500);
+                }
+            }
+            
+            type();
+        });
+    }
+
+    function initTypewriter() {
+        if (!elements.descriptionSection || !elements.typewriterText || !elements.typewriterCursor) return;
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !state.typewriterStarted) {
+                    state.typewriterStarted = true;
+                    // Start typing with premium smooth speed
+                    typeWriter(typewriterFullText, elements.typewriterText, elements.typewriterCursor, 30);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        observer.observe(elements.descriptionSection);
+    }
+
+    // ========================================
     // PARALLAX EFFECTS
     // ========================================
     function handleParallax() {
@@ -387,6 +443,9 @@
         
         // Initialize section animations
         initSectionAnimations();
+        
+        // Initialize typewriter effect for عن العطر section
+        initTypewriter();
         
         // Initialize bottle float / parallax
         initBottleFloat();

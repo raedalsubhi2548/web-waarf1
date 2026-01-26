@@ -196,8 +196,9 @@
     // ========================================
     function initAccordion() {
         if (!elements.accordionItems.length) return;
-
+        // Ensure all accordions start closed
         elements.accordionItems.forEach(item => {
+            item.classList.remove('active');
             const header = item.querySelector('.accordion-header');
             if (header) {
                 header.addEventListener('click', () => {

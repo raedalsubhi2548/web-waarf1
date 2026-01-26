@@ -2013,17 +2013,40 @@ a:focus-visible {
     text-align: center;
 }
 
+.business-badge-float {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    transition: none;
+}
+
+.business-badge-img-float {
+    /* Match WAARFE logo width: 100px desktop (same as footer-logo) */
+    width: 100px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* Responsive badge - match WAARFE logo responsive sizes */
 @media (max-width: 768px) {
-    .typewriter-container {
-        font-size: 1.05rem;
-        min-height: 200px;
+    .business-badge-img-float {
+        /* Match hero-logo-img at 768px: 80px */
+        width: 80px;
     }
-    
-    .business-badge-img {
-        height: 50px;
-    }
-    
-    .business-badge-text {
-        font-size: 0.8rem;
+}
+
+@media (max-width: 480px) {
+    .business-badge-img-float {
+        /* Match hero-logo-img at 480px: 65px */
+        width: 65px;
     }
 }

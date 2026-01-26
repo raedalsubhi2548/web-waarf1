@@ -114,13 +114,11 @@ body.intro-active {
 }
 
 .intro-logo {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 20px 60px var(--shadow-medium);
-    border: 4px solid var(--primary-dark);
-    background: var(--white);
+    width: 160px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 40px var(--shadow-medium));
+    /* NO circle, NO border - matches header logo */
 }
 
 /* ========================================
@@ -443,6 +441,15 @@ body.intro-active {
 .hero-col-bottle {
     position: relative;
     justify-self: end;
+    /* Keep bottle steady - no position changes on scroll */
+    will-change: auto;
+}
+
+/* 3D Bottle Container */
+.bottle-3d-wrapper {
+    position: relative;
+    perspective: 1000px;
+    transform-style: preserve-3d;
 }
 
 .bottle-glow {
@@ -466,21 +473,111 @@ body.intro-active {
 .bottle-image {
     position: relative;
     z-index: 2;
-    width: 340px;
+    width: 420px;
+    max-width: 420px;
     height: auto;
-    max-width: 100%;
-    filter: drop-shadow(0 35px 50px rgba(9, 56, 46, 0.28));
-    animation: bottleFloat 6s ease-in-out infinite;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Sharp image rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    /* 3D subtle tilt effect */
+    transform: perspective(1000px) rotateY(-3deg) rotateX(2deg);
+    /* Premium shadow */
+    filter: drop-shadow(0 40px 60px rgba(9, 56, 46, 0.35))
+            drop-shadow(0 15px 25px rgba(9, 56, 46, 0.2));
+    /* Gentle idle float only */
+    animation: bottleIdleFloat 5s ease-in-out infinite;
+    transition: filter 0.5s ease;
 }
 
-@keyframes bottleFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(0.5deg); }
+/* Subtle highlight sheen overlay */
+.bottle-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+/* Premium Bottle Stand/Shadow Effect */
+.bottle-stand {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 40px;
+    z-index: 1;
+}
+
+/* Oval shadow under bottle */
+.bottle-shadow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 25px;
+    background: radial-gradient(ellipse, rgba(9, 56, 46, 0.25) 0%, rgba(9, 56, 46, 0.1) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(8px);
+    animation: shadowPulse 5s ease-in-out infinite;
+}
+
+/* Faint reflection under bottle */
+.bottle-reflection {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) scaleY(-0.15) scaleX(0.7);
+    width: 120px;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(9, 56, 46, 0.08) 0%, transparent 100%);
+    border-radius: 50%;
+    filter: blur(4px);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+@keyframes shadowPulse {
+    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+    50% { opacity: 0.8; transform: translateX(-50%) scale(1.05); }
+}
+
+/* Gentle idle float - bottle stays steady, only subtle vertical movement */
+@keyframes bottleIdleFloat {
+    0%, 100% { transform: perspective(1000px) rotateY(-3deg) rotateX(2deg) translateY(0); }
+    50% { transform: perspective(1000px) rotateY(-3deg) rotateX(2deg) translateY(-10px); }
+}
+
+/* Highlight sheen that moves subtly */
+.bottle-sheen {
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 60%;
+    height: 80%;
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.08) 45%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        rgba(255, 255, 255, 0.08) 55%, 
+        transparent 100%);
+    pointer-events: none;
+    z-index: 3;
+    border-radius: 20%;
+    animation: sheenMove 8s ease-in-out infinite;
+}
+
+@keyframes sheenMove {
+    0%, 100% { opacity: 0.6; transform: translateX(0) translateY(0); }
+    50% { opacity: 0.9; transform: translateX(5px) translateY(-5px); }
 }
 
 .hero-col-bottle:hover .bottle-image {
-    transform: scale(1.03);
+    filter: drop-shadow(0 45px 70px rgba(9, 56, 46, 0.4))
+            drop-shadow(0 20px 30px rgba(9, 56, 46, 0.25));
 }
 
 /* CENTER Column: Leaves Stacked Vertically */
@@ -499,15 +596,7 @@ body.intro-active {
 .hero-col-cta {
     justify-self: start;
     align-items: center;
-    gap: 20px;
-}
-
-.price-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 0;
 }
 
 /* ========================================
@@ -611,21 +700,30 @@ body.intro-active {
 }
 
 /* ========================================
-   PRICE BLOCK
+   PRICE BLOCK - Compact with CTA
    ======================================== */
+.price-cta-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
 .price-block {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 2px;
+    margin-bottom: 6px;
 }
 
 .price-old {
     font-size: 1.1rem;
-    color: var(--text-light);
+    color: #cc3333;
     text-decoration: line-through;
-    opacity: 0.7;
+    text-decoration-color: #cc3333;
+    text-decoration-thickness: 2px;
+    font-weight: 500;
 }
 
 .price-new {
@@ -908,6 +1006,39 @@ body.intro-active {
     margin-right: auto;
 }
 
+/* Typewriter Effect for Description */
+.typewriter-text {
+    font-size: 1.1rem;
+    color: var(--text-body);
+    line-height: 2;
+    margin: 20px 0;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 3em;
+    direction: rtl;
+    text-align: center;
+}
+
+.typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background-color: var(--primary-dark);
+    margin-right: 3px;
+    vertical-align: text-bottom;
+    animation: cursorBlink 0.7s ease-in-out infinite;
+}
+
+.typewriter-cursor.hidden {
+    display: none;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
 /* ========================================
    ABOUT DEMO SECTION
    ======================================== */
@@ -953,15 +1084,76 @@ body.intro-active {
     font-size: 1rem;
     font-weight: 600;
     color: var(--primary-dark);
-    margin: 0;
+    margin: 0 0 20px 0;
+}
+
+/* Contact Buttons for About Demo Section */
+.contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Tajawal', sans-serif;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #09382E;
+}
+
+.contact-btn svg {
+    width: 20px;
+    height: 20px;
+    color: #09382E;
+    flex-shrink: 0;
+}
+
+.contact-btn-store {
+    background: #09382E;
+    color: #fff;
+}
+
+.contact-btn-store svg {
+    color: #fff;
+}
+
+.contact-btn-store:hover {
+    background: #0d4a3d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(9, 56, 46, 0.3);
+}
+
+.contact-btn-whatsapp {
+    background: #fff;
+    color: #09382E;
+}
+
+.contact-btn-whatsapp:hover {
+    background: #09382E;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(9, 56, 46, 0.3);
+}
+
+.contact-btn-whatsapp:hover svg {
+    color: #fff;
 }
 
 /* ========================================
-   POLICY SECTION - Dark Accordion FAQ
+   POLICY SECTION - Light Background with Dark Cards
    ======================================== */
 .policy-section {
     padding: 80px 20px;
-    background: var(--primary-dark);
+    background: var(--bg-cream);
     position: relative;
 }
 
@@ -973,9 +1165,18 @@ body.intro-active {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        radial-gradient(circle at 80% 20%, rgba(9, 56, 46, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(9, 56, 46, 0.02) 0%, transparent 50%);
     pointer-events: none;
+}
+
+/* Section title for policy - dark text on light bg */
+.policy-section .section-title-light {
+    color: var(--primary-dark);
+}
+
+.policy-section .section-title-light::after {
+    background: linear-gradient(90deg, var(--primary-dark), var(--gold-accent));
 }
 
 .policy-accordion {
@@ -983,37 +1184,41 @@ body.intro-active {
     margin: 0 auto;
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .accordion-item {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    margin-bottom: 15px;
+    background: #09382E;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
     overflow: hidden;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(9, 56, 46, 0.15);
 }
 
 .accordion-item:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: #09382E;
+    box-shadow: 0 6px 25px rgba(9, 56, 46, 0.2);
 }
 
 .accordion-item.active {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: #09382E;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .accordion-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 22px 25px;
+    padding: 18px 22px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .accordion-header:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .accordion-title {
@@ -1022,50 +1227,55 @@ body.intro-active {
     gap: 15px;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--white);
+    color: #F9F9F9;
     margin: 0;
 }
 
 .accordion-title svg {
     width: 24px;
     height: 24px;
-    color: var(--gold-accent);
+    color: #F9F9F9;
     flex-shrink: 0;
 }
 
 .accordion-icon {
     width: 24px;
     height: 24px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #F9F9F9;
     transition: transform 0.3s ease;
     flex-shrink: 0;
+    opacity: 0.8;
 }
 
 .accordion-item.active .accordion-icon {
     transform: rotate(180deg);
-    color: var(--gold-accent);
+    color: #F9F9F9;
+    opacity: 1;
 }
 
 .accordion-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.3s ease;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
 }
 
 .accordion-item.active .accordion-content {
     max-height: 500px;
+    opacity: 1;
 }
 
 .accordion-body {
-    padding: 0 25px 25px 64px;
-    color: rgba(255, 255, 255, 0.8);
+    padding: 0 22px 20px 60px;
+    color: #F9F9F9;
     font-size: 1rem;
     line-height: 1.8;
+    opacity: 0.9;
 }
 
 .policy-note {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-body);
     text-align: center;
     font-style: italic;
     margin-top: 30px;
@@ -1103,13 +1313,12 @@ body.intro-active {
 }
 
 .footer-logo {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 100px;
+    height: auto;
+    object-fit: contain;
     margin-bottom: 15px;
-    box-shadow: 0 5px 20px var(--shadow-soft);
-    border: 3px solid var(--primary-dark);
+    filter: drop-shadow(0 5px 15px var(--shadow-soft));
+    /* NO circle, NO border - matches header logo exactly */
 }
 
 .footer-brand-name {
@@ -1178,40 +1387,51 @@ body.intro-active {
 .business-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     background: var(--white);
     border: 1px solid var(--glass-border);
     border-radius: 10px;
-    padding: 10px 16px;
-    color: var(--text-body);
-    font-size: 0.85rem;
+    padding: 8px 12px;
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0 3px 10px var(--shadow-soft);
 }
 
 .business-badge:hover {
-    background: var(--primary-dark);
-    color: var(--white);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-medium);
 }
 
-.business-badge svg {
-    width: 18px;
-    height: 18px;
-    color: var(--gold-accent);
+/* Official Saudi Business Platform Logo */
+.saudi-business-logo {
+    height: 35px;
+    width: auto;
+    object-fit: contain;
 }
 
 .footer-bottom {
     text-align: center;
     padding-top: 30px;
     border-top: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .footer-copyright {
     font-size: 0.85rem;
     color: var(--text-light);
     margin: 0;
+}
+
+/* Version Tag for deployment verification */
+.version-tag {
+    font-size: 0.65rem;
+    color: var(--text-light);
+    opacity: 0.5;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 @media (max-width: 768px) {
@@ -1375,21 +1595,35 @@ body.intro-active {
     }
     
     .bottle-image {
-        width: 280px !important;
+        width: 340px !important;
+        max-width: 340px !important;
+    }
+    
+    .bottle-shadow {
+        width: 120px;
+        height: 20px;
     }
     
     .leaf-icon {
-        width: 38px !important;
-        height: 38px !important;
+        width: 34px !important;
+        height: 34px !important;
     }
     
     .scent-notes-vertical {
-        gap: 18px !important;
+        gap: 16px !important;
     }
     
     .price-new {
         font-size: 1.9rem;
         padding: 8px 22px;
+    }
+    
+    .price-old {
+        font-size: 1rem;
+    }
+    
+    .price-cta-wrapper {
+        gap: 6px;
     }
     
     .cta-button {
@@ -1398,7 +1632,7 @@ body.intro-active {
     }
 }
 
-/* Mobile: FORCE 3-column layout, smaller sizes */
+/* Mobile: FORCE 3-column layout, BIGGER bottle */
 @media (max-width: 768px) {
     .hero {
         padding: 45px 10px;
@@ -1427,7 +1661,7 @@ body.intro-active {
         display: grid !important;
         grid-template-columns: 1fr auto 1fr !important;
         flex-direction: unset !important;
-        gap: 15px !important;
+        gap: 12px !important;
         align-items: center !important;
     }
     
@@ -1452,47 +1686,64 @@ body.intro-active {
         order: unset !important;
     }
 
+    /* BIGGER bottle on mobile - prioritize bottle size */
     .bottle-image {
-        width: 180px !important;
-        max-width: 180px !important;
+        width: 260px !important;
+        max-width: 260px !important;
+    }
+    
+    .bottle-shadow {
+        width: 100px;
+        height: 18px;
+    }
+    
+    .bottle-sheen {
+        display: none;
     }
     
     .scent-notes-vertical {
         flex-direction: column !important;
-        gap: 12px !important;
+        gap: 10px !important;
     }
 
+    /* Smaller leaves to give more space to bottle */
     .leaf-icon {
-        width: 30px !important;
-        height: 30px !important;
+        width: 26px !important;
+        height: 26px !important;
     }
     
     .note-tooltip {
         display: none !important;
     }
     
+    /* Compact price+CTA wrapper */
+    .price-cta-wrapper {
+        gap: 5px;
+    }
+    
     .price-block {
-        margin-bottom: 10px;
+        margin-bottom: 4px;
+        gap: 1px;
     }
 
     .price-new {
-        font-size: 1.4rem;
-        padding: 6px 16px;
+        font-size: 1.3rem;
+        padding: 5px 14px;
         border-radius: 10px;
     }
     
     .price-old {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .cta-button {
-        padding: 10px 20px;
-        font-size: 0.95rem;
+        padding: 9px 18px;
+        font-size: 0.9rem;
         border-radius: 30px;
     }
     
     .cta-icon {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .section-title,
@@ -1525,10 +1776,10 @@ body.intro-active {
     }
 }
 
-/* Small Mobile: Even smaller, still 3-column */
+/* Small Mobile: BIGGER bottle, still 3-column */
 @media (max-width: 480px) {
     .hero {
-        padding: 40px 8px;
+        padding: 40px 6px;
     }
     
     .demo-banner-content {
@@ -1553,7 +1804,7 @@ body.intro-active {
         display: grid !important;
         grid-template-columns: 1fr auto 1fr !important;
         flex-direction: unset !important;
-        gap: 8px !important;
+        gap: 6px !important;
     }
     
     .hero-col-bottle {
@@ -1568,23 +1819,39 @@ body.intro-active {
         justify-self: start !important;
     }
 
+    /* MUCH BIGGER bottle on small mobile */
     .bottle-image {
-        width: 120px !important;
-        max-width: 120px !important;
+        width: 180px !important;
+        max-width: 180px !important;
     }
     
+    .bottle-shadow {
+        width: 80px;
+        height: 15px;
+    }
+    
+    /* Smaller leaves on small mobile to prioritize bottle */
     .leaf-icon {
-        width: 22px !important;
-        height: 22px !important;
+        width: 20px !important;
+        height: 20px !important;
     }
     
     .scent-notes-vertical {
-        gap: 8px !important;
+        gap: 6px !important;
+    }
+    
+    /* Compact price+CTA */
+    .price-cta-wrapper {
+        gap: 4px;
+    }
+    
+    .price-block {
+        margin-bottom: 3px;
     }
     
     .price-new {
-        font-size: 1rem;
-        padding: 5px 10px;
+        font-size: 0.95rem;
+        padding: 4px 10px;
     }
     
     .price-old {
@@ -1592,13 +1859,13 @@ body.intro-active {
     }
     
     .cta-button {
-        padding: 8px 12px;
-        font-size: 0.75rem;
+        padding: 7px 12px;
+        font-size: 0.72rem;
         gap: 4px;
     }
     
     .cta-icon {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
     
     .accordion-title {

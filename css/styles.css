@@ -1430,38 +1430,11 @@ body.intro-active {
     box-shadow: 0 6px 20px var(--shadow-medium);
 }
 
-/* Official Saudi Business Platform Logo */
+/* Official Saudi Business Logo */
 .saudi-business-logo {
     height: 35px;
     width: auto;
     object-fit: contain;
-}
-
-.business-badge-img,
-.business-badge-img-float {
-    width: 100px;
-    height: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: none;
-    border: none;
-    background: none;
-    padding: 0;
-}
-
-@media (max-width: 1024px) {
-    .business-badge-img,
-    .business-badge-img-float {
-        width: 80px;
-    }
-}
-
-@media (max-width: 768px) {
-    .business-badge-img,
-    .business-badge-img-float {
-        width: 65px;
-    }
 }
 
 .footer-bottom {
@@ -2004,7 +1977,8 @@ a:focus-visible {
 }
 
 /* ========================================
-   BUSINESS BADGE - New Image Style
+   BUSINESS BADGE - Saudi Platform Logo
+   Match WAARFE logo sizing exactly
    ======================================== */
 .business-badge-new {
     display: flex;
@@ -2025,14 +1999,6 @@ a:focus-visible {
     box-shadow: 0 8px 25px var(--shadow-medium);
 }
 
-.business-badge-img {
-    width: auto;
-    height: 60px;
-    max-width: 180px;
-    object-fit: contain;
-    border-radius: 0;
-}
-
 .business-badge-text {
     font-size: 0.85rem;
     color: var(--primary-dark);
@@ -2044,36 +2010,106 @@ a:focus-visible {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none !important;
+    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 0;
+    padding: 0 !important;
     margin-top: 10px;
     margin-bottom: 10px;
     text-decoration: none;
-    transition: none;
 }
 
+/* ========================================
+   BUSINESS BADGE IMAGE - FINAL FIX
+   Same size as WAARFE footer-logo (100px)
+   ======================================== */
+.business-badge-img,
+img.business-badge-img-float,
 .business-badge-img-float {
-    /* Match WAARFE logo width: 100px desktop (same as footer-logo) */
-    width: 100px;
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
+    width: 100px !important;
+    height: auto !important;
+    max-width: 100px !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    padding: 0 !important;
 }
 
-/* Responsive badge - match WAARFE logo responsive sizes */
-@media (max-width: 768px) {
+/* Desktop - same as footer-logo */
+@media (min-width: 769px) {
+    .business-badge-img,
+    img.business-badge-img-float,
     .business-badge-img-float {
-        /* Match hero-logo-img at 768px: 80px */
-        width: 80px;
+        width: 100px !important;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .business-badge-img,
+    img.business-badge-img-float,
+    .business-badge-img-float {
+        width: 80px !important;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .business-badge-img,
+    img.business-badge-img-float,
+    .business-badge-img-float {
+        width: 65px !important;
+    }
+}
+
+/* Force Saudi Business Badge Size */
+img[class*="business-badge"],
+img[src*="saudibusiness"],
+img[src*="top4top"],
+img[alt*="منصة الأعمال"],
+.footer img[class*="badge"],
+a[href*="saudibusiness"] img {
+    width: 100px !important;
+    min-width: 100px !important;
+    height: auto !important;
+    max-width: none !important;
+}
+
+@media (max-width: 768px) {
+    img[class*="business-badge"],
+    img[src*="saudibusiness"],
+    img[src*="top4top"],
+    img[alt*="منصة الأعمال"],
+    .footer img[class*="badge"],
+    a[href*="saudibusiness"] img {
+        width: 80px !important;
+        min-width: 80px !important;
+    }
+}
+
+/* FIX: Saudi Business Badge - Override all */
+img.business-badge-img-float {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    height: auto !important;
+}
+
+@media (max-width: 768px) {
+    img.business-badge-img-float {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
     }
 }
 
 @media (max-width: 480px) {
-    .business-badge-img-float {
-        /* Match hero-logo-img at 480px: 65px */
-        width: 65px;
+    img.business-badge-img-float {
+        width: 65px !important;
+        min-width: 65px !important;
+        max-width: 65px !important;
     }
 }

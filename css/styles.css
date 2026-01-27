@@ -1437,6 +1437,33 @@ body.intro-active {
     object-fit: contain;
 }
 
+.business-badge-img,
+.business-badge-img-float {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: none;
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+@media (max-width: 1024px) {
+    .business-badge-img,
+    .business-badge-img-float {
+        width: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .business-badge-img,
+    .business-badge-img-float {
+        width: 65px;
+    }
+}
+
 .footer-bottom {
     text-align: center;
     padding-top: 30px;

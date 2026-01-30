@@ -1716,8 +1716,8 @@ body.intro-active {
 
     /* BIGGER bottle on mobile - prioritize bottle size */
     .bottle-image {
-        width: 260px !important;
-        max-width: 260px !important;
+        width: 300px !important;
+        max-width: 300px !important;
     }
     
     .bottle-shadow {
@@ -1849,8 +1849,8 @@ body.intro-active {
 
     /* MUCH BIGGER bottle on small mobile */
     .bottle-image {
-        width: 180px !important;
-        max-width: 180px !important;
+        width: 220px !important;
+        max-width: 220px !important;
     }
     
     .bottle-shadow {

@@ -2066,12 +2066,12 @@ img.business-badge-img-float,
 }
 
 /* Force Saudi Business Badge Size */
-img[class*="business-badge"],
-img[src*="saudibusiness"],
-img[src*="top4top"],
-img[alt*="منصة الأعمال"],
-.footer img[class*="badge"],
-a[href*="saudibusiness"] img {
+img[class*="business-badge"]:not(.bottle-image),
+img[src*="saudibusiness"]:not(.bottle-image),
+img[src*="top4top"]:not(.bottle-image),
+img[alt*="منصة الأعمال"]:not(.bottle-image),
+.footer img[class*="badge"]:not(.bottle-image),
+a[href*="saudibusiness"] img:not(.bottle-image) {
     width: 100px !important;
     min-width: 100px !important;
     height: auto !important;
@@ -2079,12 +2079,12 @@ a[href*="saudibusiness"] img {
 }
 
 @media (max-width: 768px) {
-    img[class*="business-badge"],
-    img[src*="saudibusiness"],
-    img[src*="top4top"],
-    img[alt*="منصة الأعمال"],
-    .footer img[class*="badge"],
-    a[href*="saudibusiness"] img {
+    img[class*="business-badge"]:not(.bottle-image),
+    img[src*="saudibusiness"]:not(.bottle-image),
+    img[src*="top4top"]:not(.bottle-image),
+    img[alt*="منصة الأعمال"]:not(.bottle-image),
+    .footer img[class*="badge"]:not(.bottle-image),
+    a[href*="saudibusiness"] img:not(.bottle-image) {
         width: 80px !important;
         min-width: 80px !important;
     }
